@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+  <!-- base content type -->
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type id="de.agilantis.language_pack.basetype"
+      base-type="org.eclipse.core.runtime.text"
+      name="Text (Syntax Highlighting)"
+      priority="low"/>
+  </extension>
+
+  <!-- INSERT SNIPPETS HERE -->
+
+</plugin>

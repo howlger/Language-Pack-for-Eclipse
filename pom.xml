@@ -1,0 +1,207 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>language_pack</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <properties>
+
+        <!-- Tycho version (<https://github.com/eclipse/tycho/blob/master/RELEASE_NOTES.md>) specified in:
+             - .mvn/extensions.xml
+             - and here: -->
+        <tycho-version>2.7.0</tycho-version>
+
+        <maven-antrun-plugin-version>3.0.0</maven-antrun-plugin-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <modules>
+        <module>target-platform</module>
+        <module>de.agilantis.language_pack</module>
+        <module>de.agilantis.language_pack.feature</module>
+        <module>update-site</module>
+    </modules>
+    <build>
+        <plugins>
+
+            <!-- build via Tycho -->
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <target>
+                        <artifact>
+                            <groupId>language_pack</groupId>
+                            <artifactId>language_pack-target</artifactId>
+                            <version>1.0.0-SNAPSHOT</version>
+                        </artifact>
+                    </target>
+                </configuration>
+            </plugin>
+
+            <!-- generate content via maven-antrun-plugin and include it via tycho-packaging-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>add-version-to-artifacts</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+
+                                <!-- json to xml (see <https://www.json.org/json-en.html>) -->
+                                <property name="outside-of-strings"
+                                    value="([\s\{\}\[\]:,]|&lt;[/]?[oaev](?:\s(?:name|string|number)=&quot;(?:[^&quot;\\]|\\.)*+&quot;)*+[/]?>|(&quot;([^&quot;\\]|\\.)*+&quot;)|([+-]?\d++(?:\.\d++)?(?:[eE][+-]?\d++)?))*+"/>
+                                <property name="in-string" value="(?=(?:[^&quot;\\]|\\.)*+&quot;${outside-of-strings}$)"/>
+                                <property name="not-in-string"  value="(?=${outside-of-strings}$)"/>
+                                <filterchain id="json-to-xml">
+                                    <replaceregex pattern="&amp;${in-string}" flags="g" replace="&amp;amp;"/>
+                                    <replaceregex pattern="&lt;${in-string}" flags="g" replace="&amp;lt;"/>
+                                    <replaceregex pattern="\\&quot;${in-string}" flags="g" replace="&amp;quot;"/>
+                                    <replaceregex pattern="\\(.)${in-string}" flags="g" replace="\1"/>
+                                    <replaceregex pattern=",${not-in-string}" flags="g" replace=""/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:\s*+\{${not-in-string}" flags="g"
+                                        replace="&lt;o name=\1>"/>
+                                    <replaceregex pattern="\{${not-in-string}" flags="g" replace="&lt;o>"/>
+                                    <replaceregex pattern="\}${not-in-string}" flags="g" replace="&lt;/o>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:\s*+\[${not-in-string}" flags="g"
+                                        replace="&lt;a name=\1>"/>
+                                    <replaceregex pattern="\[${not-in-string}" flags="g" replace="&lt;a>"/>
+                                    <replaceregex pattern="\]${not-in-string}" flags="g" replace="&lt;/a>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:\s*+(&quot;(?:[^&quot;\\]|\\.)*+&quot;)${not-in-string}" flags="g"
+                                        replace="&lt;e name=\1 string=\2/>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:\s*+([+-]?\d++(?:\.\d++)?(?:[eE][+-]?\d++)?)${not-in-string}" flags="g"
+                                        replace="&lt;e name=\1 number=&quot;\2&quot;/>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:\s*+(true|false|null)${not-in-string}" flags="g"
+                                        replace="&lt;e name=\1 \2=&quot;\2&quot;/>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)\s*+:${not-in-string}" flags="g"
+                                        replace="&lt;e name=\1/>"/>
+                                    <replaceregex pattern="(&quot;(?:[^&quot;\\]|\\.)*+&quot;)${not-in-string}" flags="g"
+                                        replace="&lt;v string=\1/>"/>
+                                    <replaceregex pattern="([+-]?\d++(?:\.\d++)?(?:[eE][+-]?\d++)?)${not-in-string}" flags="g"
+                                        replace="&lt;v number=&quot;\1&quot;/>"/>
+                                    <replaceregex pattern="(true|false|null)${not-in-string}" flags="g"
+                                        replace="&lt;v \1=&quot;\1&quot;/>"/>
+                                </filterchain>
+
+                                <macrodef name="process-vscode-extension">
+                                    <attribute name="extension"/>
+                                    <attribute name="dir"/>
+                                    <sequential>
+                                        <mkdir dir="${project.build.directory}/generated_temp/@{extension}"/>
+                                        <get src="https://raw.githubusercontent.com/@{dir}@{extension}/package.json"
+                                            dest="${project.build.directory}/generated_temp/@{extension}/package.json"
+                                            ignoreerrors="yes"/>
+                                        <local name="has-package.json"/>
+                                        <available property="has-package.json"
+                                            file="${project.build.directory}/generated_temp/@{extension}/package.json"/>
+                                        <delete unless:set="has-package.json"
+                                            dir="${project.build.directory}/generated_temp/@{extension}"/>
+                                        <sequential if:set="has-package.json">
+                                            <copy file="${project.build.directory}/generated_temp/@{extension}/package.json"
+                                                tofile="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                encoding="UTF-8">
+                                                <filterchain refid="json-to-xml"/>
+                                            </copy>
+                                            <xslt style="${project.basedir}/../to_extension_build.xsl"
+                                                in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                out="${project.build.directory}/generated_temp/@{extension}/build.xml">
+                                                <param name="base-url"
+                                                    expression="https://raw.githubusercontent.com/@{dir}@{extension}"/>
+                                            </xslt>
+                                            <subant inheritall="yes" inheritrefs="yes">
+                                                <fileset file="${project.build.directory}/generated_temp/@{extension}/build.xml"/>
+                                                <property name="extension" value="@{extension}"/>
+                                            </subant>
+                                            <xslt style="${project.basedir}/../to_plugin_snippet.xsl"
+                                                in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                out="${project.build.directory}/generated_temp/@{extension}/plugin_snippet.xml">
+                                                <param name="extension" expression="@{extension}"/>
+                                            </xslt>
+                                        </sequential>
+                                    </sequential>
+                                </macrodef>
+
+                                <!-- run only for de.agilantis.language_pack -->
+                                <condition property="is.com.verigy.itee.helpviewer">
+                                    <equals arg1="${project.artifactId}" arg2="de.agilantis.language_pack"/>
+                                </condition>
+                                <sequential if:set="is.com.verigy.itee.helpviewer">
+                                    <get src="https://github.com/microsoft/vscode/tree/main/extensions"
+                                        dest="${project.build.directory}/vscode_extensions.html"/>
+                                    <property name="except-folder-link"
+                                        value="(?:(?:(?!&lt;a\s[^>]*?class\s*+=\s*+&quot;js-navigation-open\s++Link--primary&quot;)|(?!&lt;a\s[^>]*?href\s*+=\s*+&quot;/[^/&quot;]++/[^/&quot;]++/tree/))[\s\S])*+"/>
+                                    <concat destfile="${project.build.directory}/for-each-vscode-extension.build.xml">
+                                        <fileset file="${project.build.directory}/vscode_extensions.html"/>
+                                        <header>&lt;project default=&quot;for-each-extension&quot;>
+                                            &lt;target name=&quot;for-each-extension&quot;>${line.separator}</header>
+                                        <footer>&lt;/target>&lt;/project></footer>
+                                        <filterchain>
+                                            <replaceregex byline="no" pattern="${except-folder-link}(&lt;a\W[^>]++>)\s*+${except-folder-link}"
+                                                replace="\1${line.separator}" flags="g"/>
+                                            <replaceregex  byline="no"
+                                                pattern="&lt;a\s[^>]*?href\s*+=\s*+&quot;/([^/&quot;]++/[^/&quot;]++/)tree/([^/&quot;]++/extensions/)([^/&quot;]++)&quot;[^>]*+>"
+                                                replace="&lt;process-vscode-extension extension=&quot;\3&quot; dir=&quot;\1\2&quot;/>" flags="g"/>
+<!--
+<replaceregex pattern="&lt;process-vscode-extension extension=&quot;(?!bat|less|git-base|groovy|javascript)[^>]++>" replace=""/>
+-->
+                                        </filterchain>
+                                    </concat>
+                                    <subant inheritall="yes" inheritrefs="yes">
+                                        <fileset file="${project.build.directory}/for-each-vscode-extension.build.xml"/>
+                                    </subant>
+                                    <concat destfile="${project.build.directory}/all_plugin_snippets" encoding="UTF-8">
+                                        <fileset dir="${project.build.directory}/generated_temp"
+                                            includes="*/plugin_snippet.xml">
+                                            <contains text="&lt;extension"/>
+                                        </fileset>
+                                        <filterchain>
+                                            <replaceregex byline="no" flags="g"
+                                                pattern="(?:^|&lt;/lngpck-snippet>)(?:(?!&lt;lngpck-snippet>)[\s\S])*+(?:&lt;lngpck-snippet>|$$)"
+                                                replace=""/>
+                                        </filterchain>
+                                    </concat>
+                                    <loadfile property="all_plugin_snippets"
+                                        srcFile="${project.build.directory}/all_plugin_snippets"/>
+                                    <copy file="${project.basedir}/plugin.xml"
+                                        todir="${project.build.directory}/generated" encoding="UTF-8">
+                                        <filterchain>
+                                            <replacestring from="&lt;!-- INSERT SNIPPETS HERE -->"
+                                                to="${all_plugin_snippets}"/>
+                                        </filterchain>
+                                    </copy>
+                                </sequential>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-packaging-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <additionalFileSets>
+                        <fileSet>
+                            <directory>${project.build.directory}/generated</directory>
+                        </fileSet>
+                    </additionalFileSets>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

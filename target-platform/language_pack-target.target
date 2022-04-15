@@ -1,0 +1,19 @@
+<?pde version="3.8"?>
+<target name="Language Pack Target Platform">
+    <locations>
+        <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+            <unit id="org.eclipse.tm4e.feature.feature.group" version="0.0.0"/>
+            <unit id="org.eclipse.tm4e.ui" version="0.0.0"/>
+            <unit id="org.eclipse.rcp.feature.group" version="0.0.0"/>
+            <repository location="https://download.eclipse.org/releases/latest"/>
+        </location>
+        <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+            <unit id="org.eclipse.tm4e.feature.feature.group" version="0.0.0"/>
+            <repository location="https://download.eclipse.org/tm4e/releases/latest"/>
+        </location>
+        <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+            <unit id="org.eclipse.license.feature.group" version="0.0.0"/>
+            <repository location="https://download.eclipse.org/cbi/updates/license"/>
+        </location>
+    </locations>
+</target>

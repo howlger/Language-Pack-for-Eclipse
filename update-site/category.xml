@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="de.agilantis.language_pack.feature" version="0.0.0">
+      <category name="language_pack_category"/>
+   </feature>
+   <bundle id="org.eclipse.tm4e.core"/>
+   <bundle id="org.eclipse.tm4e.languageconfiguration"/>
+   <bundle id="org.eclipse.tm4e.registry"/>
+   <bundle id="org.eclipse.tm4e.ui"/>
+   <category-def name="language_pack_category" label="Language Pack for Eclipse">
+      <description>
+         Syntax highlighting and more for about 60 languages and formats (TextMate grammars and language configurations taken from Visual Studio Code and provided as an Eclipse plugin using Eclipse tm4e)
+      </description>
+   </category-def>
+</site>
