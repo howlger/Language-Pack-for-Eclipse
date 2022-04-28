@@ -6,6 +6,7 @@
     <xsl:param name="extension"/>
     <xsl:param name="base-url"/>
     <xsl:param name="info-file"/>
+    <xsl:param name="icons-dir"/>
 
     <!-- Wikidata link query -->
     <xsl:variable name="wikidata-link-query"
@@ -84,6 +85,12 @@
                                 <xsl:text>&lt;/href></xsl:text>
                             </xsl:attribute>
                         </echo>
+                        <xsl:if test="$language-info/@icon">
+                            <mkdir dir="${{project.build.directory}}/generated/${{extension}}"/>
+                            <copy todir="${{project.build.directory}}/generated/${{extension}}">
+                                <fileset dir="{$icons-dir}" includes="*.png"/>
+                            </copy>
+                        </xsl:if>
                     </xsl:if>
                 </xsl:for-each>
 

@@ -17,10 +17,10 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
  -->
 <info>
     <extension id="bat">
-        <language name="Batch" better-name="Batch File" wikidata="Q479833"/>
+        <language name="Batch" better-name="Batch File" wikidata="Q479833" icon="bat.png"/>
     </extension>
     <extension id="clojure">
-        <language name="Clojure" wikidata="Q51798"/>
+        <language name="Clojure" wikidata="Q51798" icon="clojure.png"/>
     </extension>
     <extension id="coffeescript">
         <language name="CoffeeScript" wikidata="Q1106819"/>
@@ -175,7 +175,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         <language name="Ruby" wikidata="Q161053" issues="syntax highlighting broken"/>
     </extension>
     <extension id="rust">
-        <language name="Rust" wikidata="Q575650"/>
+        <language name="Rust" wikidata="Q575650" icon="rust.png"/>
     </extension>
     <extension id="scss">
         <language name="SCSS" wikidata="Q1572865"/>

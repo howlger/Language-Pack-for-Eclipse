@@ -112,11 +112,19 @@
                 </xsl:if>
 
                 <!-- editor icons -->
-                <extension point="org.eclipse.ui.genericeditor.icons">
-                    <xsl:for-each select="exsl:node-set($languages)/o">
-                        <icon contentType="lng.{e[@name='id']/@string}" icon="lngeditor.png"/>
-                    </xsl:for-each>
+                <xsl:if test="document($info-file)/info/extension[@id=$extension]/language/@icon">
+                    <extension point="org.eclipse.ui.genericeditor.icons">
+                        <xsl:for-each select="exsl:node-set($languages)/o">
+                            <xsl:variable name="language-name" select="a[@name='aliases']/v[1]/@string"/>
+                            <xsl:if test="document($info-file)/info/extension[@id=$extension]
+                                              /language[@name = $language-name]/@icon">
+                                <icon contentType="lng.{e[@name='id']/@string}"
+                                    icon="{$extension}/{document($info-file)/info/extension[@id=$extension]
+                                                            /language[@name = $language-name]/@icon}"/>
+                            </xsl:if>
+                        </xsl:for-each>
                 </extension>
+                </xsl:if>
 
             </xsl:if>
 

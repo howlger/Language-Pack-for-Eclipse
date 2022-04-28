@@ -123,6 +123,7 @@
                                                 <param name="base-url"
                                                     expression="https://raw.githubusercontent.com/@{dir}@{extension}"/>
                                                 <param name="info-file" expression="${project.basedir}/../info.xml"/>
+                                                <param name="icons-dir" expression="${project.basedir}/../artwork/@{extension}"/>
                                             </xslt>
                                             <subant inheritall="yes" inheritrefs="yes">
                                                 <fileset file="${project.build.directory}/generated_temp/@{extension}/build.xml"/>
