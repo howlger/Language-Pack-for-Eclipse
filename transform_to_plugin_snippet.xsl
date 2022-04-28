@@ -1,17 +1,31 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
+    <xsl:import href="transform_commons.xsl"/>
     <xsl:output method="xml" indent="yes"/>
 
+    <!-- parameters -->
     <xsl:param name="extension"/>
+    <xsl:param name="info-file"/>
 
     <!-- process specified extension -->
     <xsl:template match="/">
         <lngpck-snippet>
-            <xsl:text>&#xa;</xsl:text>
             <xsl:comment><xsl:value-of select="concat(' ', $extension, ' ')"/></xsl:comment>
 
+            <!-- issues? -->
+            <xsl:if test="document($info-file)/info/extension[@id=$extension]/language/@issues">
+                <xsl:comment>
+                    <xsl:text> issues: </xsl:text>
+                    <xsl:for-each select="document($info-file)/info/extension[@id=$extension]/language[@issues]">
+                        <xsl:if test="position() > 1"><xsl:text>; </xsl:text></xsl:if>
+                        <xsl:value-of select="@issues"/>
+                    </xsl:for-each>
+                    <xsl:text>>>></xsl:text>
+                </xsl:comment>
+            </xsl:if>
+
             <!-- languages -->
-             <xsl:variable name="languages">
+            <xsl:variable name="languages">
                 <xsl:for-each select="o/o[@name='contributes']/a[@name='languages']/o">
                     <xsl:variable name="language-id" select="e[@name='id']/@string"/>
                     <xsl:variable name="grammars-count"
@@ -137,22 +151,12 @@
                 </extension>
             </xsl:if>
 
-        </lngpck-snippet>
-    </xsl:template>
+            <xsl:if test="document($info-file)/info/extension[@id=$extension]/language/@issues">
+                <xsl:comment><xsl:text>///</xsl:text></xsl:comment>
+            </xsl:if>
 
-    <!-- basename -->
-    <xsl:template name="basename">
-        <xsl:param name="path"/>
-        <xsl:choose>
-            <xsl:when test="translate($path, '/', '') = $path">
-                <xsl:value-of select="$path"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="basename">
-                     <xsl:with-param name="path" select="substring-after($path, '/')"/>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
+
+        </lngpck-snippet>
     </xsl:template>
 
 </xsl:stylesheet>

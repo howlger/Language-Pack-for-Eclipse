@@ -116,20 +116,50 @@
                                                 encoding="UTF-8">
                                                 <filterchain refid="json-to-xml"/>
                                             </copy>
-                                            <xslt style="${project.basedir}/../to_extension_build.xsl"
+                                            <xslt style="${project.basedir}/../transform_to_extension_build.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/build.xml">
+                                                <param name="extension" expression="@{extension}"/>
                                                 <param name="base-url"
                                                     expression="https://raw.githubusercontent.com/@{dir}@{extension}"/>
+                                                <param name="info-file" expression="${project.basedir}/../info.xml"/>
                                             </xslt>
                                             <subant inheritall="yes" inheritrefs="yes">
                                                 <fileset file="${project.build.directory}/generated_temp/@{extension}/build.xml"/>
                                                 <property name="extension" value="@{extension}"/>
                                             </subant>
-                                            <xslt style="${project.basedir}/../to_plugin_snippet.xsl"
+                                            <xslt style="${project.basedir}/../transform_to_plugin_snippet.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/plugin_snippet.xml">
                                                 <param name="extension" expression="@{extension}"/>
+                                                <param name="info-file" expression="${project.basedir}/../info.xml"/>
+                                            </xslt>
+                                            <local name="extension-base-dir"/>
+                                            <loadresource property="extension-base-dir">
+                                                  <string value="@{dir}@{extension}"/>
+                                                  <filterchain>
+                                                      <tokenfilter>
+                                                          <filetokenizer/>
+                                                          <replaceregex pattern="^([^/]++/[^/]++)/" replace="\1/tree/"/>
+                                                      </tokenfilter>
+                                                  </filterchain>
+                                            </loadresource>
+                                            <xslt style="${project.basedir}/../transform_to_about_html_snippet.xsl"
+                                                in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                out="${project.build.directory}/generated_temp/@{extension}/about_html_snippet.html">
+                                                <param name="extension" expression="@{extension}"/>
+                                                <param name="extension-href"
+                                                    expression="https://github.com/${extension-base-dir}"/>
+                                                <param name="temp-dir"
+                                                    expression="${project.build.directory}/generated_temp/@{extension}/"/>
+                                            </xslt>
+                                            <xslt style="${project.basedir}/../transform_to_info_html_snippet.xsl"
+                                                in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                out="${project.build.directory}/generated_temp/@{extension}/info_html_snippet.html">
+                                                <param name="extension" expression="@{extension}"/>
+                                                <param name="info-file" expression="${project.basedir}/../info.xml"/>
+                                                <param name="temp-dir"
+                                                    expression="${project.build.directory}/generated_temp/@{extension}/"/>
                                             </xslt>
                                         </sequential>
                                     </sequential>
@@ -172,6 +202,11 @@
                                             <replaceregex byline="no" flags="g"
                                                 pattern="(?:^|&lt;/lngpck-snippet>)(?:(?!&lt;lngpck-snippet>)[\s\S])*+(?:&lt;lngpck-snippet>|$$)"
                                                 replace=""/>
+
+                                            <!-- uncomment parts with issues -->
+                                            <replacestring from=">>>-->" to=""/>
+                                            <replacestring from="&lt;!--///" to=""/>
+
                                         </filterchain>
                                     </concat>
                                     <loadfile property="all_plugin_snippets"
@@ -183,6 +218,51 @@
                                                 to="${all_plugin_snippets}"/>
                                         </filterchain>
                                     </copy>
+
+                                    <!-- about.html -->
+                                    <concat destfile="${project.build.directory}/about_html_table_content" encoding="UTF-8">
+                                        <fileset dir="${project.build.directory}/generated_temp"
+                                            includes="*/about_html_snippet.html">
+                                            <contains text="&lt;tr>"/>
+                                        </fileset>
+                                        <filterchain>
+                                            <replaceregex byline="no" flags="g"
+                                                pattern="(?:^|&lt;/table>)(?:(?!&lt;table>)[\s\S])*+(?:&lt;table>|$$)"
+                                                replace=""/>
+                                        </filterchain>
+                                    </concat>
+                                    <loadfile property="about_html_table_content"
+                                        srcFile="${project.build.directory}/about_html_table_content"/>
+                                    <copy file="${project.basedir}/about.html"
+                                        todir="${project.build.directory}/generated" encoding="UTF-8">
+                                        <filterchain>
+                                            <replacestring from="&lt;!-- INSERT TABLE CONTENT HERE -->"
+                                                to="${about_html_table_content}"/>
+                                        </filterchain>
+                                    </copy>
+
+                                    <!-- info.html -->
+                                    <concat destfile="${project.build.directory}/info_html_table_content" encoding="UTF-8">
+                                        <fileset dir="${project.build.directory}/generated_temp"
+                                            includes="*/info_html_snippet.html">
+                                            <contains text="&lt;tr>"/>
+                                        </fileset>
+                                        <filterchain>
+                                            <replaceregex byline="no" flags="g"
+                                                pattern="(?:^|&lt;/table>)(?:(?!&lt;table>)[\s\S])*+(?:&lt;table>|$$)"
+                                                replace=""/>
+                                        </filterchain>
+                                    </concat>
+                                    <loadfile property="info_html_table_content"
+                                        srcFile="${project.build.directory}/info_html_table_content"/>
+                                    <copy file="${project.basedir}/info.html"
+                                        todir="${project.build.directory}/generated" encoding="UTF-8">
+                                        <filterchain>
+                                            <replacestring from="&lt;!-- INSERT TABLE CONTENT HERE -->"
+                                                to="${info_html_table_content}"/>
+                                        </filterchain>
+                                    </copy>
+
                                 </sequential>
                             </target>
                         </configuration>
