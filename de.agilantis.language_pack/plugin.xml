@@ -10,6 +10,13 @@
       priority="low"/>
   </extension>
 
+  <!-- use "Generic Text Editor" -->
+  <extension point="org.eclipse.ui.editors">
+    <editorContentTypeBinding
+      contentTypeId="de.agilantis.language_pack.basetype"
+      editorId="org.eclipse.ui.genericeditor.GenericEditor"/>
+  </extension>
+
   <!-- INSERT SNIPPETS HERE -->
 
 </plugin>

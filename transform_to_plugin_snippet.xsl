@@ -111,22 +111,10 @@
                     </extension>
                 </xsl:if>
 
-                <!-- editors -->
-                <extension point="org.eclipse.ui.genericeditor.presentationReconcilers">
+                <!-- editor icons -->
+                <extension point="org.eclipse.ui.genericeditor.icons">
                     <xsl:for-each select="exsl:node-set($languages)/o">
-                        <presentationReconciler class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
-                            contentType="lng.{e[@name='id']/@string}"/>
-                    </xsl:for-each>
-                </extension>
-                <extension point="org.eclipse.ui.editors">
-                    <xsl:for-each select="exsl:node-set($languages)/o">
-                        <editor id="lngeditor.{e[@name='id']/@string}"
-                            name="{a[@name='aliases']/v[1]/@string} Editor (Syntax Highlighting)"
-                            icon="lngeditor.png"
-                            class="org.eclipse.ui.internal.genericeditor.ExtensionBasedTextEditor"
-                            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor">
-                            <contentTypeBinding contentTypeId="lng.{e[@name='id']/@string}"/>
-                        </editor>
+                        <icon contentType="lng.{e[@name='id']/@string}" icon="lngeditor.png"/>
                     </xsl:for-each>
                 </extension>
 
