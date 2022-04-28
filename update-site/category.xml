@@ -9,7 +9,7 @@
    <bundle id="org.eclipse.tm4e.ui"/>
    <category-def name="language_pack_category" label="Language Pack for Eclipse">
       <description>
-         Syntax highlighting and more for about 60 languages and formats (TextMate grammars and language configurations taken from Visual Studio Code and provided as an Eclipse plugin using Eclipse tm4e)
+         Syntax highlighting and more for about 40 programming languages and file formats (TextMate grammars and language configurations taken from Visual Studio Code and provided as a plugin for Eclipse)
       </description>
    </category-def>
 </site>
