@@ -1,7 +1,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
     <xsl:import href="transform_commons.xsl"/>
-    <xsl:output method="html" omit-xml-declaration="yes" indent="yes"/>
+    <xsl:output method="text"/>
 
     <!-- parameters -->
     <xsl:param name="extension"/>
@@ -19,21 +19,22 @@
         </table>
     </xsl:template>
     <xsl:template match="language" mode="info-language">
-        <tr>
-            <td>
-                <xsl:choose>
-                    <xsl:when test="@href">
-                        <a href="{@href}">
-                            <xsl:value-of select="@name"/>
-                        </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="@name"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </td>
-            <td><xsl:value-of select="@file-associations"/></td>
-        </tr>
+        <xsl:text>| </xsl:text>
+        <xsl:choose>
+            <xsl:when test="@href">
+                <xsl:text>[</xsl:text>
+                <xsl:value-of select="@name"/>
+                <xsl:text>](</xsl:text>
+                <xsl:value-of select="@href"/>
+                <xsl:text>)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@name"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text> | </xsl:text>
+        <xsl:value-of select="@file-associations"/>
+        <xsl:text> |&#xa;</xsl:text>
     </xsl:template>
 
 </xsl:stylesheet>

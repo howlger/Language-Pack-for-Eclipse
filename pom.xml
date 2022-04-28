@@ -161,6 +161,14 @@
                                                 <param name="temp-dir"
                                                     expression="${project.build.directory}/generated_temp/@{extension}/"/>
                                             </xslt>
+                                            <xslt style="${project.basedir}/../transform_to_info_md_snippet.xsl"
+                                                in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
+                                                out="${project.build.directory}/generated_temp/@{extension}/info_md_snippet.md">
+                                                <param name="extension" expression="@{extension}"/>
+                                                <param name="info-file" expression="${project.basedir}/../info.xml"/>
+                                                <param name="temp-dir"
+                                                    expression="${project.build.directory}/generated_temp/@{extension}/"/>
+                                            </xslt>
                                         </sequential>
                                     </sequential>
                                 </macrodef>
@@ -262,6 +270,14 @@
                                                 to="${info_html_table_content}"/>
                                         </filterchain>
                                     </copy>
+
+                                    <!-- info.md -->
+                                    <concat destfile="${project.build.directory}/info.md" encoding="UTF-8">
+                                        <fileset dir="${project.build.directory}/generated_temp"
+                                            includes="*/info_md_snippet.md">
+                                            <contains text=" | "/>
+                                        </fileset>
+                                    </concat>
 
                                 </sequential>
                             </target>
