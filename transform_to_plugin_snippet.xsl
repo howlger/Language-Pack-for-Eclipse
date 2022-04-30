@@ -42,9 +42,22 @@
                 <!-- content types -->
                 <extension point="org.eclipse.core.contenttype.contentTypes">
                     <xsl:for-each select="exsl:node-set($languages)/o">
+	                    <xsl:variable name="original-name" select="a[@name='aliases']/v[1]/@string"/>
+	                    <xsl:variable name="name">
+	                        <xsl:choose>
+	                            <xsl:when test="document($info-file)/info/extension[@id = $extension]
+	                                               /language[@name = $original-name][@better-name]">
+	                                <xsl:value-of select="document($info-file)/info/extension[@id = $extension]
+	                                                          /language[@name = $original-name]/@better-name"/>
+	                            </xsl:when>
+	                            <xsl:otherwise>
+	                                <xsl:value-of select="$original-name"/>
+	                            </xsl:otherwise>
+	                        </xsl:choose>
+	                    </xsl:variable>
                         <content-type id="lng.{e[@name='id']/@string}"
                             base-type="de.agilantis.language_pack.basetype"
-                            name="{a[@name='aliases']/v[1]/@string} (Syntax Highlighting)"
+                            name="{$name} (Syntax Highlighting)"
                             priority="low">
 
                             <!-- file-extensions="..." -->
