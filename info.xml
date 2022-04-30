@@ -23,7 +23,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         <language name="Clojure" wikidata="Q51798" icon="clojure.png"/>
     </extension>
     <extension id="coffeescript">
-        <language name="CoffeeScript" wikidata="Q1106819"/>
+        <language name="CoffeeScript" wikidata="Q1106819" icon="coffeescript"/>
     </extension>
     <extension id="cpp">
         <language name="C" wikidata="Q15777"/>
