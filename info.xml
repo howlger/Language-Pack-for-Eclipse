@@ -132,7 +132,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         </language>
     </extension>
     <extension id="markdown-basics">
-        <language name="Markdown" wikidata="Q1193600" issues="completly broken"/>
+        <language name="Markdown" wikidata="Q1193600" issues="syntax highlighting and uncommenting broken, folding works"/>
     </extension>
     <extension id="objective-c">
         <language name="Objective-C" wikidata="Q188531"/>
@@ -149,7 +149,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         </language>
     </extension>
     <extension id="php">
-        <language name="PHP" wikidata="Q59" issues="java.io.FileNotFoundException: /php/language-configuration.json"/>
+        <language name="PHP" wikidata="Q59" issues="syntax highlighting broken"/>
     </extension>
     <extension id="powershell">
         <language name="PowerShell" wikidata="Q840410"/>
@@ -169,7 +169,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         <language name="Razor" better-name="ASP.NET Razor" wikidata="Q6840077"/>
     </extension>
     <extension id="restructuredtext">
-        <language name="reStructuredText" wikidata="Q287315" issues="syntax highlighting broken"/>
+        <language name="reStructuredText" wikidata="Q287315" issues="syntax highlighting broken, uncommenting and folding works"/>
     </extension>
     <extension id="ruby">
         <language name="Ruby" wikidata="Q161053" issues="syntax highlighting broken"/>

@@ -22,7 +22,7 @@
                     <xsl:variable name="language-id" select="e[@name='id']/@string"/>
                     <xsl:variable name="language-grammars-count"
                         select="count(/o/o[@name='contributes']/a[@name='grammars']/o/e[@name='language'][@string=$language-id])"/>
-                    <xsl:if test="e[@name='configuration'] and $language-grammars-count = 1">
+                    <xsl:if test="e[@name='configuration'] and $language-grammars-count > 0">
                         <xsl:variable name="basename">
                             <xsl:call-template name="basename">
                                  <xsl:with-param name="path" select="e[@name='configuration']/@string"/>
