@@ -1,6 +1,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
-    <xsl:import href="transform_commons.xsl"/>
+    <xsl:import href="to_commons.xsl"/>
     <xsl:output method="xml" indent="yes"/>
 
     <!-- parameters -->

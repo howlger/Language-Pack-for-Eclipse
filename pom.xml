@@ -52,12 +52,12 @@
                  2. For each extension do the following:
                     1. Download "package.json" and convert it to XML
                     2. Based on "package.json.xml" and "info.xml",
-                       get all required files and information (transform_to_extension_build.xsl)
+                       get all required files and information (to_extension_build.xsl)
                     3. Create snippets for artifacts to generate:
-                       - snippet for plugin.xml (transform_to_plugin_snippet.xsl)
-                       - snippet for about.html (transform_to_about_html_snippet.xsl)
-                       - snippet for info.html (transform_to_info_html_snippet.xsl)
-                       - snippet for info.md (transform_to_info_md_snippet.xsl)
+                       - snippet for plugin.xml (to_plugin_snippet.xsl)
+                       - snippet for about.html (to_about_html_snippet.xsl)
+                       - snippet for info.html (to_info_html_snippet.xsl)
+                       - snippet for info.md (to_info_md_snippet.xsl)
                  3. Generate the artifacts by joining the snippets -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -127,7 +127,7 @@
                                                 encoding="UTF-8">
                                                 <filterchain refid="json-to-xml"/>
                                             </copy>
-                                            <xslt style="${project.basedir}/../transform_to_extension_build.xsl"
+                                            <xslt style="${project.basedir}/../to_extension_build.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/build.xml">
                                                 <param name="extension" expression="@{extension}"/>
@@ -140,7 +140,7 @@
                                                 <fileset file="${project.build.directory}/generated_temp/@{extension}/build.xml"/>
                                                 <property name="extension" value="@{extension}"/>
                                             </subant>
-                                            <xslt style="${project.basedir}/../transform_to_plugin_snippet.xsl"
+                                            <xslt style="${project.basedir}/../to_plugin_snippet.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/plugin_snippet.xml">
                                                 <param name="extension" expression="@{extension}"/>
@@ -158,7 +158,7 @@
                                                       </tokenfilter>
                                                   </filterchain>
                                             </loadresource>
-                                            <xslt style="${project.basedir}/../transform_to_about_html_snippet.xsl"
+                                            <xslt style="${project.basedir}/../to_about_html_snippet.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/about_html_snippet.html">
                                                 <param name="extension" expression="@{extension}"/>
@@ -168,7 +168,7 @@
                                                 <param name="temp-dir"
                                                     expression="${project.build.directory}/generated_temp/@{extension}/"/>
                                             </xslt>
-                                            <xslt style="${project.basedir}/../transform_to_info_html_snippet.xsl"
+                                            <xslt style="${project.basedir}/../to_info_html_snippet.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/info_html_snippet.html">
                                                 <param name="extension" expression="@{extension}"/>
@@ -176,7 +176,7 @@
                                                 <param name="temp-dir"
                                                     expression="${project.build.directory}/generated_temp/@{extension}/"/>
                                             </xslt>
-                                            <xslt style="${project.basedir}/../transform_to_info_md_snippet.xsl"
+                                            <xslt style="${project.basedir}/../to_info_md_snippet.xsl"
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/info_md_snippet.md">
                                                 <param name="extension" expression="@{extension}"/>
