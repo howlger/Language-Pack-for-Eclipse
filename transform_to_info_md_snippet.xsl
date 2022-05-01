@@ -11,14 +11,14 @@
     <!-- table of languages with their file associations -->
     <xsl:template match="/">
         <table>
-            <xsl:call-template name="info">
+            <xsl:call-template name="to-model">
                 <xsl:with-param name="extension" select="$extension"/>
                 <xsl:with-param name="info-file" select="$info-file"/>
                 <xsl:with-param name="temp-dir" select="$temp-dir"/>
             </xsl:call-template>
         </table>
     </xsl:template>
-    <xsl:template match="language" mode="info-language">
+    <xsl:template match="language[not(@ignore) and not(../*[@issues and not(@ignore)])]" mode="model">
         <xsl:text>| </xsl:text>
         <xsl:choose>
             <xsl:when test="@href">

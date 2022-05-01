@@ -26,6 +26,7 @@ Update site: [`https://raw.githubusercontent.com/howlger/Language-Pack-for-Eclip
 | [Handlebars](https://handlebarsjs.com/) | *.handlebars, *.hbs, *.hjs |
 | [High-Level Shader Language](https://en.wikipedia.org/wiki/High-Level%20Shader%20Language) | *.hlsl, *.hlsli, *.fx, *.fxh, *.vsh, *.psh, *.cginc, *.compute |
 | [HTML](https://en.wikipedia.org/wiki/HTML) | *.html, *.htm, *.shtml, *.xhtml, *.xht, *.mdoc, *.jsp, *.asp, *.aspx, *.jshtm, *.volt, *.ejs, *.rhtml |
+| [INI File](https://en.wikipedia.org/wiki/INI%20file) | *.ini |
 | [Java](https://en.wikipedia.org/wiki/Java%20%28programming%20language%29) | *.java, *.jav |
 | [JavaScript React](https://en.wikipedia.org/wiki/React%20%28JavaScript%20library%29) | *.jsx |
 | [JavaScript](https://en.wikipedia.org/wiki/JavaScript) | *.js, *.es6, *.mjs, *.cjs, *.pac, jakefile |
@@ -52,3 +53,4 @@ Update site: [`https://raw.githubusercontent.com/howlger/Language-Pack-for-Eclip
 | [TypeScript](https://en.wikipedia.org/wiki/TypeScript) | *.ts, *.cts, *.mts |
 | [TypeScript React](https://www.typescriptlang.org/docs/handbook/react.html) | *.tsx |
 | [Visual Basic .NET](https://en.wikipedia.org/wiki/Visual%20Basic%20.NET) | *.vb, *.brs, *.vbs, *.bas, *.vba |
+

@@ -47,7 +47,18 @@
                 </configuration>
             </plugin>
 
-            <!-- generate content via maven-antrun-plugin and include it via tycho-packaging-plugin -->
+            <!-- generate content via maven-antrun-plugin and include it via tycho-packaging-plugin as follows:
+                 1. Compute list of extensions of https://github.com/microsoft/vscode/tree/main/extensions
+                 2. For each extension do the following:
+                    1. Download "package.json" and convert it to XML
+                    2. Based on "package.json.xml" and "info.xml",
+                       get all required files and information (transform_to_extension_build.xsl)
+                    3. Create snippets for artifacts to generate:
+                       - snippet for plugin.xml (transform_to_plugin_snippet.xsl)
+                       - snippet for about.html (transform_to_about_html_snippet.xsl)
+                       - snippet for info.html (transform_to_info_html_snippet.xsl)
+                       - snippet for info.md (transform_to_info_md_snippet.xsl)
+                 3. Generate the artifacts by joining the snippets -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -134,6 +145,8 @@
                                                 out="${project.build.directory}/generated_temp/@{extension}/plugin_snippet.xml">
                                                 <param name="extension" expression="@{extension}"/>
                                                 <param name="info-file" expression="${project.basedir}/../info.xml"/>
+                                                <param name="temp-dir"
+                                                    expression="${project.build.directory}/generated_temp/@{extension}/"/>
                                             </xslt>
                                             <local name="extension-base-dir"/>
                                             <loadresource property="extension-base-dir">
@@ -149,6 +162,7 @@
                                                 in="${project.build.directory}/generated_temp/@{extension}/package.json.xml"
                                                 out="${project.build.directory}/generated_temp/@{extension}/about_html_snippet.html">
                                                 <param name="extension" expression="@{extension}"/>
+                                                <param name="info-file" expression="${project.basedir}/../info.xml"/>
                                                 <param name="extension-href"
                                                     expression="https://github.com/${extension-base-dir}"/>
                                                 <param name="temp-dir"
@@ -213,7 +227,7 @@
                                                 replace=""/>
 
                                             <!-- uncomment parts with issues -->
-                                            <replacestring from=">>>-->" to=""/>
+                                            <replacestring from=" >>>-->" to=""/>
                                             <replacestring from="&lt;!--///" to=""/>
 
                                         </filterchain>

@@ -85,7 +85,7 @@ https://en.wikipedia.org/w/api.php?action=query&format=xml&prop=pageprops&ppprop
         <language name="HTML" wikidata="Q8811"/>
     </extension>
     <extension id="ini">
-        <language name="Ini" wikidata="Q1141412"/>
+        <language name="Ini" better-name="INI File" wikidata="Q1141412"/>
         <language name="Properties" wikidata="Q1068805"
             ignore="Properties File Editor included in Eclipse platform"
             issues="overridden by Properties File Editor"/>
